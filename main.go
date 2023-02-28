@@ -36,6 +36,7 @@ var (
 func main() {
 
 	username := flag.String("username", "", "Nome do usuário no CuriousCat")
+	limit := flag.Int("limit", 30, "Limite máximo de publicações para exibir (0 = ilimitado)")
 	flag.Parse()
 
 	if flag.NFlag() == 0 {
@@ -86,6 +87,13 @@ func main() {
 		maxTimestamp = curiouscatResponse.Posts[0].Post.Timestamp - 1
 
 		for _, post := range curiouscatResponse.Posts {
+
+			if readPosts == *limit && *limit > 0 {
+				fmt.Printf("Número máximo de posts a exibir foi atingido: %d\n", *limit)
+				done = true
+				break
+			}
+
 			readPosts++
 			fmt.Printf("Data: %s\n", time.Unix(int64(post.Post.Timestamp), 0))
 			fmt.Printf("Há: %s\n", time.Since(time.Now().Add(time.Second*time.Duration(post.Post.SecondsElapsed)*-1)).Truncate(time.Hour))
