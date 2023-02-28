@@ -50,6 +50,7 @@ func main() {
 	url = fmt.Sprintf("https://curiouscat.live/api/v2.1/profile?username=%s", *username)
 	client = http.DefaultClient
 	client.Timeout = time.Second * 5
+	defer client.CloseIdleConnections()
 
 	readPosts := 0
 	done := false
